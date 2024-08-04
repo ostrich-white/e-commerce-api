@@ -127,6 +127,23 @@ We welcome contributions to this project! To contribute, follow these steps:
     },
    ```
 
+7. Add index.ts.
+    ```ts
+      import express from "express";
+
+      const app = express();
+      const port = 8000
+
+      app.get("/ping", (req, res) => res.json({message: "Hello from server."}))
+
+      app.listen(port, () => `Server listening on port ${port}.`)
+    ```
+
+8. Run server
+    ```sh
+    npm run serve
+    ```
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
