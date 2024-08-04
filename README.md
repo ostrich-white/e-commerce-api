@@ -67,7 +67,7 @@ Welcome to the E-Commerce API repository! This project is a full-featured eComme
 
 4. **Run the application**
     ```sh
-    npm run dev
+    npm run serve
     ```
 
     The application should now be running on `http://localhost:5000` (backend).
