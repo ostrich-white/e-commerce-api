@@ -1,0 +1,27 @@
+{
+  "name": "e-commerce-api",
+  "version": "1.0.0",
+  "description": "Welcome to the E-Commerce API repository! This project is a full-featured eCommerce application built using the MERN stack (MongoDB, Express, React, Node.js). This robust api includes storefront, admin panel for managing products, orders, and users.",
+  "main": "index.js",
+  "scripts": {
+    "build": "rimraf dist && npx tsc",
+    "prestart": "npm run build",
+    "start": "node dist/index.js",
+    "preserve": "npm run build",
+    "serve": "concurrently \"npx tsc -w\" \"nodemon dist/index.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.1.0",
+    "concurrently": "^8.2.2",
+    "express": "^4.19.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
