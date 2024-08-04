@@ -136,7 +136,7 @@ We welcome contributions to this project! To contribute, follow these steps:
 
       app.get("/ping", (req, res) => res.json({message: "Hello from server."}))
 
-      app.listen(port, () => `Server listening on port ${port}.`)
+      app.listen(port, () => console.log(`Server listening on port ${port}.`))
     ```
 
 8. Run server
