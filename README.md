@@ -56,10 +56,10 @@ Welcome to the E-Commerce API repository! This project is a full-featured eComme
 
 3. **Configure environment variables**
 
-    Create a `.env` file in the `backend` directory and add the following:
+    Create a `.env` file in the root directory and add the following:
     ```env
     NODE_ENV=development
-    PORT=5000
+    PORT=3000
     MONGO_URI=your_mongo_db_uri
     JWT_SECRET=your_jwt_secret
     STRIPE_SECRET_KEY=your_stripe_secret_key
