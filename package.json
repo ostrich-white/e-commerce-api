@@ -1,0 +1,12 @@
+{
+  "name": "e-commerce-api",
+  "version": "1.0.0",
+  "description": "Welcome to the E-Commerce API repository! This project is a full-featured eCommerce application built using the MERN stack (MongoDB, Express, React, Node.js). This robust api includes storefront, admin panel for managing products, orders, and users.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
