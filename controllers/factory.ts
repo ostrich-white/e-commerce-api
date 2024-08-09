@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 
 interface IFactory<T extends Document> {
-  get(id: string): Promise<T | null>;
   create(doc: Partial<T>): Promise<T>;
   update(id: string, doc: Partial<T>): Promise<T | null>;
   delete(id: string): Promise<T | null>;
@@ -17,16 +16,6 @@ export const getAll = <T>(model: Model<T>): Function =>
     })
 
 const factory = <T extends Document>(model: Model<T>): IFactory<T> => ({
-  async get(id: string) {
-    try {
-      const document = await model.findById(id);
-      return document;
-    } catch (error) {
-      console.error('Error fetching document:', error);
-      throw error;
-    }
-  },
-
   async create(doc: Partial<T>) {
     try {
       return model.create(doc)
@@ -58,3 +47,12 @@ const factory = <T extends Document>(model: Model<T>): IFactory<T> => ({
 });
 
 export default factory;
+
+export const get = <T>(model: Model<T>): Function => 
+  catchAsync(async (req: Request, res: Response) => {
+    const document = await model.findById(req.params.id);
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+    res.json(document);
+  })
