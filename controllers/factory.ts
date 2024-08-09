@@ -1,12 +1,20 @@
 import { Model, Document } from 'mongoose';
+import { Request, Response } from 'express';
+
+import catchAsync from '../utils/catchAsync';
 
 interface IFactory<T extends Document> {
   get(id: string): Promise<T | null>;
-  getAll(): Promise<T[]>;
   create(doc: Partial<T>): Promise<T>;
   update(id: string, doc: Partial<T>): Promise<T | null>;
   delete(id: string): Promise<T | null>;
 }
+
+export const getAll = <T>(model: Model<T>): Function => 
+  catchAsync(async (req: Request, res: Response) => {
+      const documents = await model.find();
+      res.json(documents);
+    })
 
 const factory = <T extends Document>(model: Model<T>): IFactory<T> => ({
   async get(id: string) {
@@ -15,16 +23,6 @@ const factory = <T extends Document>(model: Model<T>): IFactory<T> => ({
       return document;
     } catch (error) {
       console.error('Error fetching document:', error);
-      throw error;
-    }
-  },
-
-  async getAll() {
-    try {
-      const documents = await model.find();
-      return documents;
-    } catch (error) {
-      console.error('Error fetching documents:', error);
       throw error;
     }
   },
