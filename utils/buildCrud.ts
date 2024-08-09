@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction,  Router } from 'express';
 import { Model, Document } from 'mongoose';
-import factory from "./factory";
+import factory from "../controllers/factory";
 
 const buildCRUD = <T extends Document>(model: Model<T>, router: Router= Router()) => {
-  const { get, getAll, create, update, delete: deleteDoc } = factory(model);
+  const { get, create, update, delete: deleteDoc } = factory(model);
 
   const controller = {
     async get(req: Request, res: Response, next: NextFunction) {
@@ -13,15 +13,6 @@ const buildCRUD = <T extends Document>(model: Model<T>, router: Router= Router()
           return res.status(404).json({ message: 'Document not found' });
         }
         res.json(document);
-      } catch (error) {
-        next(error);
-      }
-    },
-
-    async getAll(req: Request, res: Response, next: NextFunction) {
-      try {
-        const documents = await getAll();
-        res.json(documents);
       } catch (error) {
         next(error);
       }
@@ -61,7 +52,6 @@ const buildCRUD = <T extends Document>(model: Model<T>, router: Router= Router()
     }
   };
 
-  router.get('/', controller.getAll);
   router.get('/:id', controller.get);
   router.post('/', controller.create);
   router.put('/:id', controller.update);
