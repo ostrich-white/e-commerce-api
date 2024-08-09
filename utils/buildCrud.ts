@@ -3,21 +3,9 @@ import { Model, Document } from 'mongoose';
 import factory from "../controllers/factory";
 
 const buildCRUD = <T extends Document>(model: Model<T>, router: Router= Router()) => {
-  const { get, create, update, delete: deleteDoc } = factory(model);
+  const { create, update, delete: deleteDoc } = factory(model);
 
   const controller = {
-    async get(req: Request, res: Response, next: NextFunction) {
-      try {
-        const document = await get(req.params.id);
-        if (!document) {
-          return res.status(404).json({ message: 'Document not found' });
-        }
-        res.json(document);
-      } catch (error) {
-        next(error);
-      }
-    },
-
     async create(req: Request, res: Response, next: NextFunction) {
       try {
         const document = await create(req.body);
@@ -52,7 +40,6 @@ const buildCRUD = <T extends Document>(model: Model<T>, router: Router= Router()
     }
   };
 
-  router.get('/:id', controller.get);
   router.post('/', controller.create);
   router.put('/:id', controller.update);
   router.delete('/:id', controller.delete);
