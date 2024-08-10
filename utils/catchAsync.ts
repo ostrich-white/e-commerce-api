@@ -6,4 +6,3 @@ export default (fn: controller) =>
     (req: Request, res: Response, next: NextFunction): void => {
         fn(req, res, next).catch(next)
     }
-    
