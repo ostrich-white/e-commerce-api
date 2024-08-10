@@ -4,13 +4,13 @@ import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 
-export const getAll = <T>(model: Model<T>): Function => 
+export const getAll = <T>(model: Model<T>) => 
   catchAsync(async (req: Request, res: Response) => {
       const documents = await model.find();
       res.json(documents);
     })
 
-export const get = <T>(model: Model<T>): Function => 
+export const get = <T>(model: Model<T>) => 
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const document = await model.findById(req.params.id);
     if (!document) {
@@ -19,14 +19,14 @@ export const get = <T>(model: Model<T>): Function =>
     res.json(document);
   })
 
-export const create = <T>(model: Model<T>): Function => 
+export const create = <T>(model: Model<T>) => 
   catchAsync(async (req: Request, res: Response) => {
     const document = await model.create(req.body);
     
     res.status(201).json(document);
   })
 
-export const update = <T>(model: Model<T>): Function => 
+export const update = <T>(model: Model<T>) => 
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {params: {id}, body} = req
     const document = await model.findByIdAndUpdate(id, body, { new: true });
@@ -36,7 +36,7 @@ export const update = <T>(model: Model<T>): Function =>
       res.json(document);
   })
   
-export const remove = <T>(model: Model<T>): Function => 
+export const remove = <T>(model: Model<T>) => 
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const document = await model.findByIdAndDelete(req.params.id);
     if (!document) {
