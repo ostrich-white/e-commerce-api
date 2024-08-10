@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 
 interface IFactory<T extends Document> {
-  update(id: string, doc: Partial<T>): Promise<T | null>;
   delete(id: string): Promise<T | null>;
 }
 
@@ -15,16 +14,7 @@ export const getAll = <T>(model: Model<T>): Function =>
     })
 
 const factory = <T extends Document>(model: Model<T>): IFactory<T> => ({
-  async update(id: string, doc: Partial<T>) {
-    try {
-      const document = await model.findByIdAndUpdate(id, doc, { new: true });
-      return document;
-    } catch (error) {
-      console.error('Error updating document:', error);
-      throw error;
-    }
-  },
-
+ 
   async delete(id: string) {
     try {
       const document = await model.findByIdAndDelete(id);
@@ -53,3 +43,14 @@ export const create = <T>(model: Model<T>): Function =>
     
     res.status(201).json(document);
   })
+
+export const update = <T>(model: Model<T>): Function => 
+  catchAsync(async (req: Request, res: Response) => {
+    const {params: {id}, body} = req
+    const document = await model.findByIdAndUpdate(id, body, { new: true });
+      if (!document) {
+        return res.status(404).json({ message: 'Document not found' });
+      }
+      res.json(document);
+  })
+  
