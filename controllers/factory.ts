@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 
 interface IFactory<T extends Document> {
-  delete(id: string): Promise<T | null>;
 }
 
 export const getAll = <T>(model: Model<T>): Function => 
@@ -14,16 +13,6 @@ export const getAll = <T>(model: Model<T>): Function =>
     })
 
 const factory = <T extends Document>(model: Model<T>): IFactory<T> => ({
- 
-  async delete(id: string) {
-    try {
-      const document = await model.findByIdAndDelete(id);
-      return document;
-    } catch (error) {
-      console.error('Error deleting document:', error);
-      throw error;
-    }
-  }
 });
 
 export default factory;
@@ -54,3 +43,11 @@ export const update = <T>(model: Model<T>): Function =>
       res.json(document);
   })
   
+export const remove = <T>(model: Model<T>): Function => 
+  catchAsync(async (req: Request, res: Response) => {
+    const document = await model.findByIdAndDelete(req.params.id);
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+    res.status(204).send();
+  })
