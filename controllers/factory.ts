@@ -1,21 +1,13 @@
-import { Model, Document } from 'mongoose';
+import { Model } from 'mongoose';
 import { Request, Response } from 'express';
 
 import catchAsync from '../utils/catchAsync';
-
-interface IFactory<T extends Document> {
-}
 
 export const getAll = <T>(model: Model<T>): Function => 
   catchAsync(async (req: Request, res: Response) => {
       const documents = await model.find();
       res.json(documents);
     })
-
-const factory = <T extends Document>(model: Model<T>): IFactory<T> => ({
-});
-
-export default factory;
 
 export const get = <T>(model: Model<T>): Function => 
   catchAsync(async (req: Request, res: Response) => {
