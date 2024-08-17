@@ -20,6 +20,12 @@ const userSchema: Schema<User> = new Schema({
   role: { type: String, default: "user" },
 });
 
-const User: Model <User> = mongoose.model("User", userSchema);
+userSchema.pre('save', function (next) {
+  if(this.password === this.confirmPassword)
+    this.confirmPassword = undefined
+  next()
+})
+
+const User: Model<User> = mongoose.model("User", userSchema);
 
 export default User;
