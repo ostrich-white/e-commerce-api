@@ -13,6 +13,7 @@ const productSchema: Schema <Products> = new Schema({
   name: { type: String, required: true},
   price: { type: Number, default: 0 },
   description: { type: String, default: ""},
+  category: { type: String, default: ""},
   imgUrl: { type: String, default: ""}, //TODO: Make a defaultImageLink
   tags: [String],
 });
