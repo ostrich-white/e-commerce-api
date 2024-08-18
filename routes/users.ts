@@ -15,18 +15,16 @@ router.post('/signup', async (req, res) => {
     }
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', async ({body: {email, password}}, res) => {
     try {
-        const {body: {email, password}} = req;
-        console.log({email, password});
+        const user = await users.findOne({email}).select(['+password', '-name'])
+        const isPasswordMatch = await user.matchPassword(password)
         
-        const findUser = await users.findOne({email, password})
-        
-        if(!findUser)
+        if(!user || !isPasswordMatch)
             return res.status(400).json({message: "Invalid credentials"})
-        res.status(200).json({message: findUser})
+        res.status(200).json({message: "user logged in successfully."})
     } catch (error) {
-        res.status(403).json({message: error})
+        res.status(403).json({error: error})
     }
 })
 
