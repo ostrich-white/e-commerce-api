@@ -15,4 +15,19 @@ router.post('/signup', async (req, res) => {
     }
 })
 
+router.post('/login', async (req, res) => {
+    try {
+        const {body: {email, password}} = req;
+        console.log({email, password});
+        
+        const findUser = await users.findOne({email, password})
+        
+        if(!findUser)
+            return res.status(400).json({message: "Invalid credentials"})
+        res.status(200).json({message: findUser})
+    } catch (error) {
+        res.status(403).json({message: error})
+    }
+})
+
 export default router
