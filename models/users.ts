@@ -1,7 +1,7 @@
 import mongoose, { Schema, Model, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
-export interface User extends Document {
+export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
@@ -9,9 +9,10 @@ export interface User extends Document {
   resetToken?: string;
   expireToken?: string;
   role?: string;
+  matchPassword: (password: string) => Promise<Boolean>;
 };
 
-const userSchema: Schema<User> = new Schema({
+const userSchema: Schema<IUser> = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, select: false },
@@ -35,6 +36,6 @@ userSchema.method('matchPassword', async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword, this.password);
 })
 
-const User: Model<User> = mongoose.model("User", userSchema);
+const User: Model<IUser> = mongoose.model("User", userSchema);
 
 export default User;
