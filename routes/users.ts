@@ -1,5 +1,6 @@
 import { Router } from "express";
-import users, { User } from "../models/users";
+import users from "../models/users";
+import jwt from "jsonwebtoken";
 
 const router = Router()
 
@@ -17,12 +18,15 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async ({body: {email, password}}, res) => {
     try {
-        const user = await users.findOne({email}).select(['+password', '-name'])
-        const isPasswordMatch = await user.matchPassword(password)
+        const user = await users.findOne({email}).select(['+password'])
         
-        if(!user || !isPasswordMatch)
+        if(!user || !(await user.matchPassword(password)))
             return res.status(400).json({message: "Invalid credentials"})
-        res.status(200).json({message: "user logged in successfully."})
+        const token = jwt.sign({id: user._id}, 'jwt_secret_key', {expiresIn: '1h'})
+        res.status(200).json({
+            message: "user logged in successfully.",
+            token: token
+        })
     } catch (error) {
         res.status(403).json({error: error})
     }
