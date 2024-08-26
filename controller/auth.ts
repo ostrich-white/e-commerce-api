@@ -33,7 +33,8 @@ export const login = async ({body: {email, password}}: Request, res: Response) =
         if(!user || !(await user.matchPassword(password)))
             return res.status(400).json({message: "Invalid credentials"})
         const token = jwt.sign({id: user._id}, jwtSecretKey, {expiresIn: '1h'})
-        res.status(200).json({message: "Login successful", token: token})
+        res.cookie('token', token, {httpOnly: true});
+        res.redirect('/api/v1/users/getme');
     } catch (error) {
         res.status(403).json({error})
     }
