@@ -7,8 +7,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
   confirmPassword?: string;
-  resetToken?: string;
-  expireToken?: string;
+  resetPasswordToken?: string;
+  tokenExpiresAt?: number;
   role?: string;
   matchPassword: (password: string) => Promise<Boolean>;
 };
@@ -21,8 +21,8 @@ const userSchema: Schema<IUser> = new Schema({
   } },
   password: { type: String, required: true, select: false },
   confirmPassword: { type: String },
-  resetToken: { type: String },
-  expireToken: { type: String },
+  resetPasswordToken: { type: String },
+  tokenExpiresAt: { type: String },
   role: { type: String, default: "user" },
 });
 
