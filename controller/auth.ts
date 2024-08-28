@@ -71,6 +71,8 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     try {
         const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+        if(password !== confirmPassword)
+            return res.status(401).json({message: 'Password doesn"t match confirm password'});
 
         const user = await users.findOne({
             resetPasswordToken: hashedToken,
