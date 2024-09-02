@@ -92,3 +92,19 @@ export const resetPassword = async (req: Request, res: Response) => {
         res.status(500).json({ error: error })
     }
 }
+
+export const changePassword = async (req: Request, res: Response) => {
+    const {body: {currentPassword, newPassword}} = req
+    try {
+        const user = await users.findOne({ _id: req.user.id}).select(["+password"])
+        
+        if(!user || !await user.matchPassword(currentPassword))
+            return res.status(401).json({message: "Invalid Credentials"})
+
+        user.password = newPassword;
+        await user.save()
+        res.status(200).json({message: "Password changed successfully"})
+    } catch (error) {
+        res.status(500).json({ error: error })
+    }
+}
