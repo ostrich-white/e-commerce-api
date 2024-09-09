@@ -5,6 +5,13 @@ import crypto from "crypto";
 
 const jwtSecretKey  = process.env.JWT_SECRET_KEY || 'secretKey'
 
+export const authorize = (role: String) => (req: Request, res: Response, next: NextFunction) => {
+    if( !req.user || (req.user.role !== role && req.user.role !== 'admin') ) {
+        return res.status(403).json({message: "Unauthorized access"})
+    }
+    next()
+}
+
 export const protect = (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token
     if(!token)
