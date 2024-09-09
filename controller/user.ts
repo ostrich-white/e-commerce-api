@@ -10,6 +10,21 @@ export const getMe = async (req: Request, res: Response) => {
     }
 }
 
+export const get = async (req: Request, res: Response) => {
+    try {
+        const user = await User.findById(req.params.id)
+        if(!user){
+            return res.status(404).json({message: "User not found"})
+        }
+        if(req.user.role !== 'admin' && req.user.id !== user.id) {
+            return res.status(403).json({message: 'Unauthorized'})
+        }
+        res.status(200).json(user)
+    } catch (error) {
+        res.status(500).json({error})
+    }
+}
+
 export const getAll = async (req: Request, res: Response) => {
     try {
         const users = await User.find()
