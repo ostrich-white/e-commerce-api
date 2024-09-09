@@ -2,14 +2,20 @@ import { NextFunction, Request, Response } from "express";
 import users from "../models/users";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import User from "../models/users";
 
 const jwtSecretKey  = process.env.JWT_SECRET_KEY || 'secretKey'
 
-export const authorize = (role: String) => (req: Request, res: Response, next: NextFunction) => {
-    if( !req.user || (req.user.role !== role && req.user.role !== 'admin') ) {
-        return res.status(403).json({message: "Unauthorized access"})
+export const authorize = (role: String) => async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await User.findById(req.user.id)
+        if( !user || (user.role !== role && user.role !== 'admin') ) {
+            return res.status(403).json({message: "Unauthorized access"})
+        }
+        next()
+    } catch (error) {
+        res.status(500).json({error})
     }
-    next()
 }
 
 export const protect = (req: Request, res: Response, next: NextFunction) => {
