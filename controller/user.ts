@@ -18,3 +18,13 @@ export const getAll = async (req: Request, res: Response) => {
         res.status(500).json({error})
     }
 }
+
+export const create = async (req: Request, res: Response) => {
+    try {
+        const createdUser = await User.create(req.body)
+
+        res.status(201).json(createdUser)
+    } catch (error) {
+        res.status(400).json({error})
+    }
+}
