@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getMe } from "../controller/user";
-import { protect } from "../controller/auth";
+import { getAll, getMe } from "../controller/user";
+import { authorize, protect } from "../controller/auth";
 
 const router = Router()
 
-router.use('/getme', protect, getMe)
+router.get('/getme', protect, getMe)
+router.get('/', protect, authorize('admin'), getAll)
 
-export default router
+export default router;
