@@ -68,3 +68,16 @@ export const update = async (req: Request, res: Response) => {
         res.status(400).json({error})
     }
 }
+
+export const remove = async (req: Request, res: Response) => {
+    try {
+        const user = await User.deleteOne({id: req.params.id})
+
+        if(!user.deletedCount)
+            return res.status(400).json({message: "User not found"})
+
+        res.json({message:"User removed"})
+    } catch (error) {
+        res.status(500).json({error})
+    }
+}
